@@ -44,7 +44,6 @@ RUN mkdir -p /etc/service/nginx && \
     mv /services/nginx.conf /etc/nginx/nginx.conf && \
     mv /services/nginx.sh /etc/service/nginx/run
 
-
 # Seafile
 WORKDIR /opt/seafile
 
@@ -57,8 +56,6 @@ RUN mkdir -p /opt/seafile/ && cd /opt/seafile/ && \
 # For using TLS connection to LDAP/AD server with docker-ce.
 RUN find /opt/seafile/ \( -name "liblber-*" -o -name "libldap-*" -o -name "libldap_r*" -o -name "libsasl2.so*" \) -delete
 
-
 EXPOSE 80
-
 
 CMD ["/sbin/my_init", "--", "/scripts/start.py"]
