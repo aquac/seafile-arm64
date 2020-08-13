@@ -1,0 +1,20 @@
+kind: pipeline
+type: docker
+name: default
+
+clone:
+  disable: true
+
+steps:
+- name: clone
+  image: drone/git
+  commands:
+  - git clone https://github.com/haiwen/seafile-docker.git
+- name: docker
+  image: plugins/docker
+  settings:
+    repo: lbischof/seafile-armhf
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
