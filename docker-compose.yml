@@ -1,0 +1,38 @@
+version: '2.4'
+
+networks:
+    default:
+        external:
+            name: web
+
+services:
+    seafile:
+        container_name: seafile
+        image: lbischof/seafile-armhf
+        restart: unless-stopped
+        volumes:
+            - /data/volumes/seafile/shared:/shared
+        environment:
+            - DB_HOST=seafile_db
+            - DB_ROOT_PASSWD=seafile
+            - SEAFILE_ADMIN_EMAIL=example@example.com
+            - SEAFILE_ADMIN_PASSWORD=asecret
+        labels:
+            - traefik.enable=true
+            - traefik.frontend.rule=Host:seafile.domain.com
+            - traefik.port=80
+    memcached:
+        image: memcached:1.5.6
+        container_name: seafile_memcached
+        entrypoint: memcached -m 256
+    seafile_db:
+        container_name: seafile_db
+        image: linuxserver/mariadb
+        restart: unless-stopped
+        environment:
+            - TZ
+            - PUID
+            - PGID
+            - MYSQL_ROOT_PASSWORD=seafile
+        volumes:
+            - /data/volumes/seafile/data:/config
