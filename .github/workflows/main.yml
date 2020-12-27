@@ -22,14 +22,14 @@ jobs:
       - name: Set up Docker Buildx      
         uses: crazy-max/ghaction-docker-buildx@v1      
         with:        
-          version: latest    
+          version: latest      
       - name: Prepare
         if: success()      
         id: prepare      
         run: |        
           echo ::set-output name=docker_platform::${DOCKER_TARGET_PLATFORM}        
           echo ::set-output name=docker_image::${DOCKER_IMAGE}        
-          echo ::set-output name=version::${GITHUB_RUN_NUMBER}    
+          echo ::set-output name=version::${GITHUB_REF##*/}    
       - name: Docker Login      
         if: success()      
         run: |        
