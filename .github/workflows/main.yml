@@ -29,7 +29,7 @@ jobs:
         run: |        
           echo ::set-output name=docker_platform::${DOCKER_TARGET_PLATFORM}        
           echo ::set-output name=docker_image::${DOCKER_IMAGE}        
-          echo ::set-output name=version::${GITHUB_REF##*/}    
+          echo ::set-output name=version::${GITHUB_REF##*/}-armhf    
       - name: Docker Login      
         if: success()      
         run: |        
@@ -40,9 +40,6 @@ jobs:
           docker buildx build \
           --platform ${{ steps.prepare.outputs.docker_platform }} \
           --tag ${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }} \
+          --tag ${{ steps.prepare.outputs.docker_image }}:latest \
           --file ./Dockerfile \
           --output type=image,push=true .
-      - name: Push again as latest
-        if: success()
-        run: |
-          docker push --tag ${{ steps.prepare.outputs.docker_image }}:latest 
