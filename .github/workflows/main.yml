@@ -12,8 +12,13 @@ jobs:
       DOCKER_PASSWORD: "${{ secrets.DOCKER_HUB_PASSWORD }}" 
       DOCKER_TARGET_PLATFORM: linux/arm/v7                 
     steps:
-      - name: Check out the repo
+      - name: Check out our repo
         uses: actions/checkout@v2
+      - name: Checkout SeaFile repo
+        uses: actions/checkout@v2
+        with:
+          repository: haiwen/seafile-docker
+          path: seafile-docker
       - name: Set up Docker Buildx      
         uses: crazy-max/ghaction-docker-buildx@v1      
         with:        
