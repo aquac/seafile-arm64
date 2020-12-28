@@ -7,10 +7,10 @@ jobs:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     env:
-      DOCKER_IMAGE: "${{ secrets.DOCKER_HUB_USERNAME }}/seafile-mc"
+      DOCKER_IMAGE: "${{ secrets.DOCKER_HUB_USERNAME }}/seafile-armhf"
       DOCKER_USERNAME: "${{ secrets.DOCKER_HUB_USERNAME }}"
-      DOCKER_PASSWORD: "${{ secrets.DOCKER_HUB_PASSWORD }}" 
-      DOCKER_TARGET_PLATFORM: linux/arm/v7                 
+      DOCKER_PASSWORD: "${{ secrets.DOCKER_HUB_PASSWORD }}"
+      DOCKER_TARGET_PLATFORM: linux/arm/v7
     steps:
       - name: Check out our repo
         uses: actions/checkout@v2
@@ -19,27 +19,19 @@ jobs:
         with:
           repository: haiwen/seafile-docker
           path: seafile-docker
-      - name: Set up Docker Buildx      
-        uses: crazy-max/ghaction-docker-buildx@v1      
-        with:        
-          version: latest      
-      - name: Prepare
-        if: success()      
-        id: prepare      
-        run: |        
-          echo ::set-output name=docker_platform::${DOCKER_TARGET_PLATFORM}        
-          echo ::set-output name=docker_image::${DOCKER_IMAGE}        
-          echo ::set-output name=version::${GITHUB_REF##*/}-armhf    
-      - name: Docker Login      
-        if: success()      
-        run: |        
-          echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" --password-stdin          
-      - name: Run Buildx (push image)      
-        if: success()      
-        run: |        
+      - name: Set up Docker Buildx
+        uses: crazy-max/ghaction-docker-buildx@v1
+        with:
+          buildx-version: latest
+      - name: Docker Login
+        if: success()
+        run: |
+          echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" --password-stdin
+      - name: Run Buildx (push image)
+        if: success()
+        run: |
           docker buildx build \
-          --platform ${{ steps.prepare.outputs.docker_platform }} \
-          --tag ${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }} \
-          --tag ${{ steps.prepare.outputs.docker_image }}:latest \
+          --platform ${DOCKER_TARGET_PLATFORM} \
+          --tag ${DOCKER_IMAGE}:latest \
           --file ./Dockerfile \
           --output type=image,push=true .
