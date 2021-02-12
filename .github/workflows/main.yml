@@ -1,37 +1,41 @@
 name: Build and push Seafile image
 
-on: [push]
+on:
+  push:
+    branches: master
 
 jobs:
-  build_and_push:
+  main:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     env:
-      DOCKER_IMAGE: "${{ secrets.DOCKER_HUB_USERNAME }}/seafile-armhf"
-      DOCKER_USERNAME: "${{ secrets.DOCKER_HUB_USERNAME }}"
-      DOCKER_PASSWORD: "${{ secrets.DOCKER_HUB_PASSWORD }}"
-      DOCKER_TARGET_PLATFORM: linux/arm/v7
+      DOCKER_IMAGE: "${{ secrets.DOCKERHUB_USERNAME }}/seafile-armhf"
     steps:
-      - name: Check out our repo
-        uses: actions/checkout@v2
-      - name: Checkout SeaFile repo
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - 
+        name: Checkout SeaFile repo
         uses: actions/checkout@v2
         with:
           repository: haiwen/seafile-docker
           path: seafile-docker
-      - name: Set up Docker Buildx
-        uses: crazy-max/ghaction-docker-buildx@v1
+      -
+        name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
         with:
-          buildx-version: latest
-      - name: Docker Login
-        if: success()
-        run: |
-          echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" --password-stdin
-      - name: Run Buildx (push image)
-        if: success()
-        run: |
-          docker buildx build \
-          --platform ${DOCKER_TARGET_PLATFORM} \
-          --tag ${DOCKER_IMAGE}:latest \
-          --file ./Dockerfile \
-          --output type=image,push=true .
+          context: .
+          file: ./Dockerfile
+          platforms: linux/arm64
+          push: true
+          tags: ${DOCKER_IMAGE}:latest
