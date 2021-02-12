@@ -21,6 +21,9 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Checkout
+        uses: actions/checkout@v2
       - 
         name: Checkout SeaFile repo
         uses: actions/checkout@v2
