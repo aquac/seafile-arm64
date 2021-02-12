@@ -20,7 +20,7 @@ RUN apt-get install -y libtiff5-dev libjpeg8-dev libopenjp2-7-dev zlib1g-dev \
 
 # Python3
 RUN apt-get install -y python3 python3-pip python3-setuptools
-RUN python3.6 -m pip install --upgrade pip && rm -r /root/.cache/pip
+RUN python3 -m pip install --upgrade pip && rm -r /root/.cache/pip
 
 RUN pip3 install --timeout=3600 click termcolor colorlog pymysql \
     django==1.11.29 && rm -r /root/.cache/pip
