@@ -1,5 +1,5 @@
 # CUSTOM base image that supports arm
-FROM phusion/baseimage:master-arm64
+FROM phusion/baseimage:18.04-1.0.0
 ENV SEAFILE_SERVER=seafile-server SEAFILE_VERSION=7.1.5
 
 RUN apt-get update --fix-missing
