@@ -8,8 +8,6 @@ jobs:
   main:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
-    env:
-      DOCKER_IMAGE: "${{ secrets.DOCKERHUB_USERNAME }}/seafile-armhf"
     steps:
       -
         name: Set up QEMU
@@ -23,6 +21,9 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Checkout
+        uses: actions/checkout@v2
       - 
         name: Checkout SeaFile repo
         uses: actions/checkout@v2
@@ -38,4 +39,4 @@ jobs:
           file: ./Dockerfile
           platforms: linux/arm64
           push: true
-          tags: ${DOCKER_IMAGE}:latest
+          tags: procativo/seafile-armhf:latest
