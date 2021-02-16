@@ -39,4 +39,4 @@ jobs:
           file: ./Dockerfile
           platforms: linux/arm64
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}//seafile-armhf:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/seafile-armhf:latest
