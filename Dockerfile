@@ -16,13 +16,13 @@ RUN apt-get install -y nginx
 # CUSTOM install Pillow dependencies and libmemcached
 RUN apt-get install -y libtiff5-dev libjpeg8-dev libopenjp2-7-dev zlib1g-dev \
     libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python3-tk \
-    libharfbuzz-dev libfribidi-dev libxcb1-dev libmemcached-dev
+    libharfbuzz-dev libfribidi-dev libxcb1-dev libmemcached-dev libmariadbclient-dev
 
 # Python3
 RUN apt-get install -y python3 python3-pip python3-setuptools
 RUN python3 -m pip install --upgrade pip && rm -r /root/.cache/pip
 
-RUN pip3 install --timeout=3600 click termcolor colorlog pymysql \
+RUN pip3 install --timeout=3600 click termcolor colorlog pymysql gunicorn mysqlclient\
     django==1.11.29 && rm -r /root/.cache/pip
 
 RUN pip3 install --timeout=3600 Pillow pylibmc captcha jinja2 \
@@ -30,9 +30,9 @@ RUN pip3 install --timeout=3600 Pillow pylibmc captcha jinja2 \
     rm -r /root/.cache/pip
 
 # CUSTOM full path to directories
-COPY seafile-docker/scripts_7.1 /scripts
-COPY seafile-docker/image/seafile_7.1/templates /templates
-COPY seafile-docker/image/seafile_7.1/services /services
+COPY seafile-docker/scripts_8.0/ /scripts
+COPY seafile-docker/image/seafile_8.0//templates /templates
+COPY seafile-docker/image/seafile_8.0/services /services
 RUN chmod u+x /scripts/*
 
 RUN mkdir -p /etc/my_init.d && \
