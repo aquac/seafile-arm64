@@ -1,6 +1,6 @@
 # CUSTOM base image that supports arm
-FROM phusion/baseimage:18.04-1.0.0
-ENV SEAFILE_SERVER=seafile-server SEAFILE_VERSION=7.1.5
+FROM phusion/baseimage:focal-1.0.0-arm64
+ENV SEAFILE_SERVER=seafile-server SEAFILE_VERSION=8.0.7
 
 RUN apt-get update --fix-missing
 
@@ -49,9 +49,9 @@ WORKDIR /opt/seafile
 
 # CUSTOM download arm build
 RUN mkdir -p /opt/seafile/ && cd /opt/seafile/ && \
-    wget https://github.com/haiwen/seafile-rpi/releases/download/v${SEAFILE_VERSION}/seafile-server-${SEAFILE_VERSION}-bionic-arm64.tar.gz && \
-    tar -zxvf seafile-server-${SEAFILE_VERSION}-bionic-arm64.tar.gz && \
-    rm -f seafile-server-${SEAFILE_VERSION}-bionic-arm64.tar.gz
+    wget https://github.com/haiwen/seafile-rpi/releases/download/v${SEAFILE_VERSION}/seafile-server-${SEAFILE_VERSION}-focal-arm64v8.tar.gz && \
+    tar -zxvf seafile-server-${SEAFILE_VERSION}-focal-arm64v8.tar.gz && \
+    rm -f seafile-server-${SEAFILE_VERSION}-focal-arm64v8.tar.gz
 
 # For using TLS connection to LDAP/AD server with docker-ce.
 RUN find /opt/seafile/ \( -name "liblber-*" -o -name "libldap-*" -o -name "libldap_r*" -o -name "libsasl2.so*" \) -delete
